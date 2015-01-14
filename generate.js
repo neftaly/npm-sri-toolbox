@@ -1,26 +1,9 @@
 /*
-	subresource-integrity.generate
+	sri-toolbox.generate
 */
 "use strict";
 
-var crypto = require("crypto");
-var param = require("node-qs-serialization").param;
-var base64formatter = require("base64formatter");
-
-
-/*
-	Facades
-*/
-
-var base64url = function (string) {
-	return base64formatter(string, {to: "rfc4648"});
-};
-
-var hash = function (string, algorithm) {
-	return crypto
-		.createHash(algorithm)
-		.digest(string);
-};
+var serialize = require("rfc6920-toolbox").serialize;
 
 
 /*
@@ -30,33 +13,32 @@ var hash = function (string, algorithm) {
 var array = function (string, options) {
 	// Defaults
 	options = { 
-		algorithms: options.algorithms || { "sha-256": "SHA256" }
+		algorithms: options.algorithms || ["sha-256"],
 		authority: options.authority || "",
 		parameters: options.parameters || {}
 	}; // TODO: Mixin
-	// Designed for ES6 arrow functions
-	return Object.keys(options.algorithms)
+	return options.algorithms.slice(0) // Array clone
 		.map(function (algorithm) { 
-			return "ni:"
-				+ "//"
-				+ options.authority 
-				+ "/"
-				+ algorithm 
-				+ ";"
-				// TODO: currying
-				+ base64url(hash(string, options.algorithms[algorithm]))
-				+ "?"
-				+ param(options.parameters);
+			return serialize({
+				authority: options.authority,
+				algorithm: algorithm,
+				data: string,
+				paramaters: options.parameters
+			});
 		});
 };
 
 
-var string = function (string, options, delimiter) {
+var string = function (string, options) {
 	// Defaults
-	delimiter = delimiter || " ";
-	return array.join(delimiter);
+	options.delimiter = options.delimiter || " "; // TODO: Mixin
+	return array(options).join(options.delimiter);
 };
 
+
+/*
+	Exports
+*/
 
 if (typeof module !== "undefined") {
 	module.exports = {
