@@ -1,39 +1,45 @@
 /*
-	sri-toolbox.generate
+	sri-toolbox-generate
 */
-"use strict";
 
+var R = require("ramda");
 var serialize = require("rfc6920-toolbox").serialize;
+
+var defaults = R.mixin({
+	algorithms: ["sha-256"],
+	authority: "",
+	parameters: {},
+	delimiter: " ",
+	serialize: true
+});
 
 
 /*
 	Functionality
 */
 
-var array = function (string, options) {
-	// Defaults
-	options = { 
-		algorithms: options.algorithms || ["sha-256"],
-		authority: options.authority || "",
-		parameters: options.parameters || {}
-	}; // TODO: Mixin
-	return options.algorithms.slice(0) // Array clone
-		.map(function (algorithm) { 
-			return serialize({
-				authority: options.authority,
-				algorithm: algorithm,
-				data: string,
-				paramaters: options.parameters
-			});
+var array = R.curry(function (options, string) {
+	return R.map(function (algorithm) { 
+		return serialize({
+			authority: options.authority,
+			algorithm: algorithm,
+			data: string,
+			paramaters: options.parameters
 		});
-};
+	}, options.algorithms);
+});
 
 
-var string = function (string, options) {
-	// Defaults
-	options.delimiter = options.delimiter || " "; // TODO: Mixin
-	return array(options).join(options.delimiter);
-};
+var string = R.curry(function (options, string) {
+	return array(options, string).join(options.delimiter);
+});
+
+
+var main = R.curry(function (options, string) {
+	options = defaults(options);
+	if (options.serialize) return string(options, string);
+	return array(options, string);
+});
 
 
 /*
@@ -41,8 +47,5 @@ var string = function (string, options) {
 */
 
 if (typeof module !== "undefined") {
-	module.exports = {
-		array: array,
-		string: string
-	};
+	module.exports = main;
 }

@@ -1,11 +1,42 @@
-# sri-toolbox
-[Subresource Integrity](http://www.w3.org/TR/SRI/) toolbox.
+# sri-toolbox [![Build Status](https://travis-ci.org/neftaly/npm-sri-toolbox.svg?branch=master)](https://travis-ci.org/neftaly/npm-sri-toolbox)
+
+[Subresource Integrity](http://www.w3.org/TR/SRI/) tools.
 
 Install
 -------
 ```shell
 npm install sri-toolbox
 ```
+
+Usage
+-----
+```javascript
+var sriToolbox = require("sri-toolbox");
+
+sriToolbox({ options }, data); //=> result
+```
+
+**Note:** this module supports [currying](http://fr.umio.us/favoring-curry/).
+```javascript
+var sriToolboxer = sriToolbox({ option });
+
+sriToolboxer(data); //=> result
+```
+
+Options
+-------
+Key: type **name** *= default*  
+
+* type **name** *= value*  
+	Description
+
+
+
+
+
+
+
+---
 
 Example
 -------
