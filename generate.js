@@ -1,9 +1,9 @@
-/*
+4/*
 	sri-toolbox-generate
 */
 
 var R = require("ramda");
-var serialize = require("rfc6920-toolbox").serialize;
+var rfc6920Toolbox = require("rfc6920-toolbox");
 
 var defaults = R.mixin({
 	algorithms: ["sha-256"],
@@ -18,26 +18,26 @@ var defaults = R.mixin({
 	Functionality
 */
 
-var array = R.curry(function (options, string) {
+var array = R.curry(function (options, dataString) {
 	return R.map(function (algorithm) { 
-		return serialize({
+		return rfc6920Toolbox.serialize({
 			authority: options.authority,
 			algorithm: algorithm,
-			data: string,
-			paramaters: options.parameters
+			digest: rfc6920Toolbox.digest(algorithm, dataString),
+			parameters: options.parameters
 		});
 	}, options.algorithms);
 });
 
 
-var string = R.curry(function (options, string) {
-	return array(options, string).join(options.delimiter);
+var string = R.curry(function (options, dataString) {
+	return array(options, dataString).join(options.delimiter);
 });
 
 
-var main = R.curry(function (options, string) {
+var main = R.curry(function (options, dataString) {
 	options = defaults(options);
-	if (options.serialize) return string(options, string);
+	if (options.serialize) return string(options, dataString);
 	return array(options, string);
 });
 

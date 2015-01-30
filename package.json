@@ -1,6 +1,6 @@
 {
   "name": "sri-toolbox",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Subresource Integrity tools",
   "author": {
     "name": "Neftaly Hernandez",
@@ -24,7 +24,7 @@
   ],
   "dependencies": {
     "ramda": "~0.8.0",
-    "rfc6920-toolbox": "0.x.x"
+    "rfc6920-toolbox": "0.1.1"
   },
   "devDependencies": {
     "mocha": "~2.1.0"
