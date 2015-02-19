@@ -1,51 +1,62 @@
-4/*
-	sri-toolbox-generate
+/*
+    sri-toolbox-generate
 */
 
-var R = require("ramda");
-var rfc6920Toolbox = require("rfc6920-toolbox");
+/*jslint node: true */
+"use strict";
 
-var defaults = R.mixin({
-	algorithms: ["sha-256"],
-	authority: "",
-	parameters: {},
-	delimiter: " ",
-	serialize: true
-});
+var crypto = require("crypto"),
+    url = require("url"),
+
+    defaults = function (options) {
+        return {
+            algorithms: options.algorithms || ["sha256"],
+            delimiter: options.delimiter || " ",
+            type: options.type,
+        };
+    },
 
 
 /*
-	Functionality
+    Functionality
 */
 
-var array = R.curry(function (options, dataString) {
-	return R.map(function (algorithm) { 
-		return rfc6920Toolbox.serialize({
-			authority: options.authority,
-			algorithm: algorithm,
-			digest: rfc6920Toolbox.digest(algorithm, dataString),
-			parameters: options.parameters
-		});
-	}, options.algorithms);
-});
+    // Generate hash
+    digest = function (algorithm, data) {
+        return crypto
+            .createHash(algorithm)
+            .update(data)
+            .digest("base64");
+    },
 
+    // Build content-type string
+    type = function (options) {
+        if (!options.type) {
+            return "";
+        }
+        return "type:" + options.type + options.delimiter;
+    },
 
-var string = R.curry(function (options, dataString) {
-	return array(options, dataString).join(options.delimiter);
-});
+    // Generate SRI-formatted hash string
+    hashes = function (options, data) {
+        return options.algorithms
+            .map(function (algorithm) {
+                return algorithm + "-" + digest(algorithm, data);
+            })
+            .join(options.delimiter);
+    },
 
-
-var main = R.curry(function (options, dataString) {
-	options = defaults(options);
-	if (options.serialize) return string(options, dataString);
-	return array(options, string);
-});
+    main = function (options, data) {
+        // Defaults
+        options = defaults(options);
+        return type(options) + hashes(options, data);
+    };
 
 
 /*
-	Exports
+    Exports
 */
 
-if (typeof module !== "undefined") {
-	module.exports = main;
+if (module !== undefined) {
+    module.exports = main;
 }
