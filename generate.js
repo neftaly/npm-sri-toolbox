@@ -34,7 +34,11 @@ var crypto = require("crypto"),
         if (!options.type) {
             return "";
         }
-        return "type:" + options.type + options.delimiter;
+
+        return "type:" +
+            // Break at whitespace. Remove any unexpected chars.
+            options.type.replace(/(\s.*)|[^\w\/\-]/g, "") +
+            options.delimiter;
     },
 
     // Generate SRI-formatted hash string

@@ -26,4 +26,13 @@ describe("Generate:", function(){
 		assert.equal(expect, result);
 	});
 
+	it("Malformed type", function(){
+		var options = {
+			type: "application/javascr\"ipt; IGNORETHIS",
+		};
+		var expect = "type:application/javascript sha256-C6CB9UYIS9UJeqinPHWTHVqh/E1uhG5Twh+Y5qFQmYg=";
+		var result = sriToolbox.generate(options, sourceCode);
+		assert.equal(expect, result);
+	});
+
 });
