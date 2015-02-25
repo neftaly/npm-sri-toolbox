@@ -36,8 +36,8 @@ var crypto = require("crypto"),
         }
 
         return "type:" +
-            // Break at whitespace. Remove any unexpected chars.
-            options.type.replace(/(\s.*)|[^\w\/\-]/g, "") +
+            // Break at whitespace, then remove any unexpected chars.
+            options.type.replace(/(\s.*)|[^\w\/\!\#\$\&\-\^\+\.]/g, "") +
             options.delimiter;
     },
 
