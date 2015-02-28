@@ -1,4 +1,4 @@
-# sri-toolbox [![Build Status](https://travis-ci.org/neftaly/npm-sri-toolbox.svg?branch=master)](https://travis-ci.org/neftaly/npm-sri-toolbox)
+# sri-toolbox [![Build Status](https://travis-ci.org/neftaly/npm-sri-toolbox.svg?branch=master)](https://travis-ci.org/neftaly/npm-sri-toolbox) [![Coverage Status](https://coveralls.io/repos/neftaly/npm-sri-toolbox/badge.svg?branch=master)](https://coveralls.io/r/neftaly/npm-sri-toolbox?branch=master)
 
 [Subresource Integrity](http://www.w3.org/TR/SRI/) tools.
 
