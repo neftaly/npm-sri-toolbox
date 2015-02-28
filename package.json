@@ -22,10 +22,11 @@
     "integrity",
     "security"
   ],
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
-    "mocha": "^2.1.0"
+    "coveralls": "^2.11.2",
+    "mocha": "^2.1.0",
+    "mocha-lcov-reporter": "0.0.2"
   },
   "engines": {
     "node": ">= 0.10.4"
