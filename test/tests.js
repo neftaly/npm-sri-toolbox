@@ -28,6 +28,22 @@ describe("Generate:", function () {
         assert.equal(expect, result);
     });
 
+    it("Object", function () {
+        var options = {
+            full: true,
+            type: "application/javascript; charset: utf8"
+        };
+        var expect = {
+            hashes: {
+                sha256: "C6CB9UYIS9UJeqinPHWTHVqh/E1uhG5Twh+Y5qFQmYg="
+            },
+            type: "application/javascript",
+            integrity: "type:application/javascript sha256-C6CB9UYIS9UJeqinPHWTHVqh/E1uhG5Twh+Y5qFQmYg="
+        };
+        var result = sriToolbox.generate(options, sourceCode);
+        assert.deepEqual(expect, result);
+    });
+
     it("Malformed type", function () {
         var options = {
             type: "application/javascr\"ipt; IGNORE THIS ",
