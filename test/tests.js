@@ -1,47 +1,49 @@
-var assert = require("assert")
-var sriToolbox = require("../main");
-var fs = require("fs");
+"use strict";
 
-//var testString = "";
-var sourceCode = fs.readFileSync("./test/jquery-1.10.2.min.js.testdata", { encoding: "ascii" });
+var assert = require("assert"),
+    sriToolbox = require("../main"),
+    fs = require("fs"),
+
+//    testString = "",
+    sourceCode = fs.readFileSync("./test/jquery-1.10.2.min.js.testdata", { encoding: "ascii" });
 
 
-describe("Generate:", function(){
+describe("Generate:", function () {
 
-	it("Default", function(){
-		var options = {};
-		var expect = "sha256-C6CB9UYIS9UJeqinPHWTHVqh/E1uhG5Twh+Y5qFQmYg=";
-		var result = sriToolbox.generate(options, sourceCode);
-		assert.equal(expect, result);
-	});
+    it("Default", function () {
+        var options = {};
+        var expect = "sha256-C6CB9UYIS9UJeqinPHWTHVqh/E1uhG5Twh+Y5qFQmYg=";
+        var result = sriToolbox.generate(options, sourceCode);
+        assert.equal(expect, result);
+    });
 
-	it("Custom", function(){
-		var options = {
-			type: "application/javascript",
-			algorithms: ["sha512"],
-			delimiter: "  "
-		};
-		var expect = "type:application/javascript  sha512-OqaFaP8lkurUEqDH9cOavDesVi8At8Fq8HzV7/iBqtznfscQQLNsCtnC0qpO3XdE+nKw9Ey4tIXU8oOxtJwhQQ==";
-		var result = sriToolbox.generate(options, sourceCode);
-		assert.equal(expect, result);
-	});
+    it("Custom", function () {
+        var options = {
+            type: "application/javascript",
+            algorithms: ["sha512"],
+            delimiter: "  "
+        };
+        var expect = "type:application/javascript  sha512-OqaFaP8lkurUEqDH9cOavDesVi8At8Fq8HzV7/iBqtznfscQQLNsCtnC0qpO3XdE+nKw9Ey4tIXU8oOxtJwhQQ==";
+        var result = sriToolbox.generate(options, sourceCode);
+        assert.equal(expect, result);
+    });
 
-	it("Malformed type", function(){
-		var options = {
-			type: "application/javascr\"ipt; IGNORE THIS ",
-		};0
-		var expect = "type:application/javascript sha256-C6CB9UYIS9UJeqinPHWTHVqh/E1uhG5Twh+Y5qFQmYg=";
-		var result = sriToolbox.generate(options, sourceCode);
-		assert.equal(expect, result);
-	});
+    it("Malformed type", function () {
+        var options = {
+            type: "application/javascr\"ipt; IGNORE THIS ",
+        };
+        var expect = "type:application/javascript sha256-C6CB9UYIS9UJeqinPHWTHVqh/E1uhG5Twh+Y5qFQmYg=";
+        var result = sriToolbox.generate(options, sourceCode);
+        assert.equal(expect, result);
+    });
 
-	it("RFC-6838 chars", function(){
-		var options = {
-			type: "text/aA!#$&-^_+.",
-		};
-		var expect = "type:text/aA!#$&-^_+. sha256-C6CB9UYIS9UJeqinPHWTHVqh/E1uhG5Twh+Y5qFQmYg=";
-		var result = sriToolbox.generate(options, sourceCode);
-		assert.equal(expect, result);
-	});
+    it("RFC-6838 chars", function () {
+        var options = {
+            type: "text/aA!#$&-^_+.",
+        };
+        var expect = "type:text/aA!#$&-^_+. sha256-C6CB9UYIS9UJeqinPHWTHVqh/E1uhG5Twh+Y5qFQmYg=";
+        var result = sriToolbox.generate(options, sourceCode);
+        assert.equal(expect, result);
+    });
 
 });
