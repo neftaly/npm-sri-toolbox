@@ -2,7 +2,7 @@
     sri-toolbox-generate
 */
 
-/*jslint node: true */
+/*jslint node:true regexp:true */
 "use strict";
 
 var crypto = require("crypto"),
@@ -13,6 +13,7 @@ var crypto = require("crypto"),
             algorithms: options.algorithms || ["sha256"],
             delimiter: options.delimiter || " ",
             type: options.type,
+            full: options.full || false
         };
     },
 
@@ -29,31 +30,52 @@ var crypto = require("crypto"),
             .digest("base64");
     },
 
-    // Build content-type string
+    // Format content-type
     type = function (options) {
         if (!options.type) {
-            return "";
+            return undefined;
         }
 
-        return "type:" +
-            // Break at whitespace, then remove any unexpected chars.
-            options.type.replace(/(\s.*)|[^\w\/\!\#\$\&\-\^\+\.]/g, "") +
-            options.delimiter;
+        // Cut string at whitespace, then remove any non-whitelisted chars.
+        return options.type.replace(/(\s.*)|[^\w\/\!\#\$\&\-\^\+\.]/g, "");
     },
 
-    // Generate SRI-formatted hash string
+    // Generate list of hashes
     hashes = function (options, data) {
-        return options.algorithms
-            .map(function (algorithm) {
-                return algorithm + "-" + digest(algorithm, data);
-            })
-            .join(options.delimiter);
+        var hashes = {};
+        options.algorithms.forEach(function (algorithm) {
+            hashes[algorithm] = digest(algorithm, data);
+        });
+        return hashes;
+    },
+
+    // Build an integrity string
+    integrity = function (options, sri) {
+        var output = "";
+
+        // Content-type
+        output += (sri.type) ? "type:" + sri.type + options.delimiter : "";
+
+        // Hash list
+        output += Object.keys(sri.hashes).map(function (algorithm) {
+            return algorithm + "-" + sri.hashes[algorithm];
+        }).join(options.delimiter);
+
+        return output;
     },
 
     main = function (options, data) {
         // Defaults
         options = defaults(options);
-        return type(options) + hashes(options, data);
+
+        var sri = {
+            hashes: hashes(options, data),
+            type: type(options),
+            integrity: undefined
+        };
+        sri.integrity = integrity(options, sri);
+
+        return (options.full) ? sri : sri.integrity;
     };
 
 
@@ -61,6 +83,4 @@ var crypto = require("crypto"),
     Exports
 */
 
-if (module !== undefined) {
-    module.exports = main;
-}
+module.exports = main;
