@@ -26,7 +26,7 @@ var crypto = require("crypto"),
     digest = function (algorithm, data) {
         return crypto
             .createHash(algorithm)
-            .update(data)
+            .update(data, 'utf8')
             .digest("base64");
     },
 

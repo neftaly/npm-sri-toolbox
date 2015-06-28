@@ -17,6 +17,14 @@ describe("Generate:", function () {
         assert.equal(expect, result);
     });
 
+    it("Unicode chars", function () {
+        var options = {};
+        var unicodeSourceCode = "console.log('I ♡ WebAppSec!');\n";
+        var expect = "sha256-TH5eRuwfOSKZE0EKVF4WZ6gVQ/zUch4CZE2knqpS4MU=";
+        var result = sriToolbox.generate(options, unicodeSourceCode);
+        assert.equal(expect, result);
+    });
+
     it("Custom", function () {
         var options = {
             type: "application/javascript",
