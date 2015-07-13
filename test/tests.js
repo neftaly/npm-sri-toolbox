@@ -27,47 +27,26 @@ describe("Generate:", function () {
 
     it("Custom", function () {
         var options = {
-            type: "application/javascript",
             algorithms: ["sha512"],
             delimiter: "  "
         };
-        var expect = "type:application/javascript  sha512-OqaFaP8lkurUEqDH9cOavDesVi8At8Fq8HzV7/iBqtznfscQQLNsCtnC0qpO3XdE+nKw9Ey4tIXU8oOxtJwhQQ==";
+        var expect = "sha512-OqaFaP8lkurUEqDH9cOavDesVi8At8Fq8HzV7/iBqtznfscQQLNsCtnC0qpO3XdE+nKw9Ey4tIXU8oOxtJwhQQ==";
         var result = sriToolbox.generate(options, sourceCode);
         assert.equal(expect, result);
     });
 
     it("Object", function () {
         var options = {
-            full: true,
-            type: "application/javascript; charset: utf8"
+            full: true
         };
         var expect = {
             hashes: {
                 sha256: "C6CB9UYIS9UJeqinPHWTHVqh/E1uhG5Twh+Y5qFQmYg="
             },
-            type: "application/javascript",
-            integrity: "type:application/javascript sha256-C6CB9UYIS9UJeqinPHWTHVqh/E1uhG5Twh+Y5qFQmYg="
+            integrity: "sha256-C6CB9UYIS9UJeqinPHWTHVqh/E1uhG5Twh+Y5qFQmYg="
         };
         var result = sriToolbox.generate(options, sourceCode);
         assert.deepEqual(expect, result);
-    });
-
-    it("Malformed type", function () {
-        var options = {
-            type: "application/javascr\"ipt; IGNORE THIS ",
-        };
-        var expect = "type:application/javascript sha256-C6CB9UYIS9UJeqinPHWTHVqh/E1uhG5Twh+Y5qFQmYg=";
-        var result = sriToolbox.generate(options, sourceCode);
-        assert.equal(expect, result);
-    });
-
-    it("RFC-6838 chars", function () {
-        var options = {
-            type: "text/aA!#$&-^_+.",
-        };
-        var expect = "type:text/aA!#$&-^_+. sha256-C6CB9UYIS9UJeqinPHWTHVqh/E1uhG5Twh+Y5qFQmYg=";
-        var result = sriToolbox.generate(options, sourceCode);
-        assert.equal(expect, result);
     });
 
 });
