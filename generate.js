@@ -12,7 +12,6 @@ var crypto = require("crypto"),
         return {
             algorithms: options.algorithms || ["sha256"],
             delimiter: options.delimiter || " ",
-            type: options.type,
             full: options.full || false
         };
     },
@@ -30,16 +29,6 @@ var crypto = require("crypto"),
             .digest("base64");
     },
 
-    // Format content-type
-    type = function (options) {
-        if (!options.type) {
-            return undefined;
-        }
-
-        // Cut string at whitespace, then remove any non-whitelisted chars.
-        return options.type.replace(/(\s.*)|[^\w\/\!\#\$\&\-\^\+\.]/g, "");
-    },
-
     // Generate list of hashes
     hashes = function (options, data) {
         var hashes = {};
@@ -52,9 +41,6 @@ var crypto = require("crypto"),
     // Build an integrity string
     integrity = function (options, sri) {
         var output = "";
-
-        // Content-type
-        output += (sri.type) ? "type:" + sri.type + options.delimiter : "";
 
         // Hash list
         output += Object.keys(sri.hashes).map(function (algorithm) {
@@ -70,7 +56,6 @@ var crypto = require("crypto"),
 
         var sri = {
             hashes: hashes(options, data),
-            type: type(options),
             integrity: undefined
         };
         sri.integrity = integrity(options, sri);

@@ -18,17 +18,15 @@ var sriToolbox = require("sri-toolbox");
 var jquerySourceCode = file("jquery-1.10.2.min.js");
 
 var integrity = sriToolbox.generate({
-    type: "application/javascript",
-    algorithms: ["sha256"],
+    algorithms: ["sha256"]
 }, jquerySourceCode);
-//=> "type:application/javascript sha256-C6CB9UYIS9UJeqinPHWTHVqh/E1uhG5Twh+Y5qFQmYg="
+//=> "sha256-C6CB9UYIS9UJeqinPHWTHVqh/E1uhG5Twh+Y5qFQmYg="
 ```
 
 You may also access the data used to build the integrity attribute, using the option "full":
 ```js
 var integrityObject = sriToolbox.generate({
-    full: true,
-    type: "application/javascript; charset: utf8"
+    full: true
 }, jquerySourceCode);
 //=> object
 ```
@@ -37,8 +35,7 @@ var integrityObject = sriToolbox.generate({
     "hashes": {
         "sha256": "C6CB9UYIS9UJeqinPHWTHVqh/E1uhG5Twh+Y5qFQmYg="
     },
-    "type": "application/javascript",
-    "integrity": "type:application/javascript sha256-C6CB9UYIS9UJeqinPHWTHVqh/E1uhG5Twh+Y5qFQmYg="
+    "integrity": "sha256-C6CB9UYIS9UJeqinPHWTHVqh/E1uhG5Twh+Y5qFQmYg="
 }
 ```
 
@@ -58,9 +55,6 @@ Key: type **name** *= default*
 
 * string **delimiter** *= " "*  
     Integrity attribute delimiter
-
-* string **type** *= ""*  
-    Content-type of file
 
 * boolean **full** *= false*  
     Return a string if false, object if true. See example.
