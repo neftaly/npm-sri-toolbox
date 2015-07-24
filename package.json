@@ -15,6 +15,7 @@
   "scripts": {
     "test": "mocha"
   },
+  "bin": "./cli.js",
   "keywords": [
     "sri-toolbox",
     "SRI",
