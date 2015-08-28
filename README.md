@@ -58,3 +58,10 @@ Key: type **name** *= default*
 
 * boolean **full** *= false*  
     Return a string if false, object if true. See example.
+
+CLI usage
+-------
+
+```
+sri-toolbox filename.js
+```
