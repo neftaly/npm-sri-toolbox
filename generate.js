@@ -5,8 +5,7 @@
 /*jslint node:true regexp:true */
 "use strict";
 
-var crypto = require("crypto"),
-    url = require("url"),
+var crypto = require("crypto");
 
     defaults = function (options) {
         return {
